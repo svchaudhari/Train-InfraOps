@@ -12,20 +12,20 @@ metadata:
     app: {{ template "name" $ }}
 {{- if $.Values.persistence.aws }}   
     failure-domain.beta.kubernetes.io/zone: {{ index $.Values "persistence" "aws" $idx "zone" }}
+    topology.kubernetes.io/zone: {{ index $.Values "persistence" "aws" $idx "zone" }}
 {{- end }}     
 spec:
  capacity:
     storage: {{ $.Values.persistence.dataDirSize | quote }}  
  accessModes:
     - ReadWriteOnce
- persistentVolumeReclaimPolicy: Recycle
+ persistentVolumeReclaimPolicy: Retain
  claimRef:
     namespace: {{ $.Values.namespace }}  
     name: "kafka-data-{{ template "name" $ }}-{{ $idx }}"
 {{- if $.Values.persistence.aws }}
  awsElasticBlockStore:
     volumeID: {{ index $.Values "persistence" "aws" $idx "volumeId" }}
-    zone: {{ index $.Values "persistence" "aws" $idx "zone" }}
     fsType: ext4
 {{- end }} 
 {{- if $.Values.persistence.azure }}
@@ -40,7 +40,15 @@ spec:
  cinder: 
     fsType: "ext4" 
     volumeID: {{ index $.Values "persistence" "openstack" $idx }}
-{{- end }}         
+{{- end }}  
+{{- if $.Values.persistence.iscsi }}
+ iscsi:
+   targetPortal: {{ index $.Values "persistence" "iscsi" "targetPortal" }} 
+   iqn: {{ index $.Values "persistence" "iscsi" "iqn" $idx }}
+   lun: 0
+   fsType: 'ext4'
+   readOnly: true  
+{{- end }}     
 ---
 {{- end }}
 {{- end }}
