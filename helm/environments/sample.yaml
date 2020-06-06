@@ -1,5 +1,5 @@
 global:
-  domain: egov-micro-qa.egovernments.org
+  domain: <APP-URL>      #Replace it for your env
 
 cluster-configs:
   namespaces:
@@ -28,13 +28,13 @@ cluster-configs:
   configmaps:
     egov-config:
       data:
-        db-host: "egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com"
+        db-host: "<DB_SERVER>"  #Replace it for your env
         db-name: "egov_qa_db"
-        db-url: "jdbc:postgresql://egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/egov_qa_db"
-        bpa-db-url: "jdbc:postgresql://egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/bpa_qa_db"
-        erp-db-url: "jdbc:postgresql://egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/finance_qa_db"
-        domain: "egov-micro-qa.egovernments.org"
-        egov-services-fqdn-name: "https://egov-micro-qa.egovernments.org/"
+        db-url: "jdbc:postgresql://<DB_SERVER>:5432/egov_qa_db"  #Replace it for your env
+        bpa-db-url: "jdbc:postgresql://<DB_SERVER>:5432/bpa_qa_db"  #Replace it for your env
+        erp-db-url: "jdbc:postgresql://<DB_SERVER>:5432/finance_qa_db"  #Replace it for your env
+        domain: "<APP-URL>"      #Replace it for your env
+        egov-services-fqdn-name: "https://<APP-URL>/"      #Replace it for your env
         egov-state-level-tenant-id: "pb"
         es-host: "elasticsearch-data-v1.es-cluster"
         es-indexer-host: "http://elasticsearch-data-v1.es-cluster:9200/"
@@ -43,7 +43,7 @@ cluster-configs:
         kafka-infra-brokers: kafka-v2.kafka-cluster:9092
         logging-level-jdbc: "DEBUG"
         mobile-validation-workaround: "true"
-        s3-assets-bucket: "(pb-egov-assets|egov-dev-assets)"
+        s3-assets-bucket: "egov-dev-assets"   #Replace it for your env
         serializers-timezone-in-ist: "true"
         server-tomcat-max-connections: "500"
         server-tomcat-max-threads: "10"
@@ -110,16 +110,13 @@ egov-filestore:
   is-bucket-fixed: "true"
   is-s3-enabled: "true"
   fixed-bucketname: egov-rainmaker # Only for Dev & QA
-  aws:
-    aws-key: "dWUAYyRg81y5R5qoDfkwwqPCEfCGXZHwCJmTwKItgCI="
-    aws-secret-key: "SZwM3/vVbjm64QT3caUKzPxPfvkNee7kv5zZIlZZAzBv8FVqt4YeMEqMnFBTiz9XTVYIItctNrSQ5n2LiMk+qA=="
   allowed-formats-map: "{jpg:{'image/jpg','image/jpeg'},jpeg:{'image/jpeg','image/jpg'},png:{'image/png'},pdf:{'application/pdf'},odt:{'application/vnd.oasis.opendocument.text'},ods:{'application/vnd.oasis.opendocument.spreadsheet'},docx:{'application/x-tika-msoffice','application/x-tika-ooxml','application/vnd.oasis.opendocument.text'},doc:{'application/x-tika-msoffice','application/x-tika-ooxml','application/vnd.oasis.opendocument.text'},dxf:{'text/plain'},csv:{'text/plain'},txt:{'text/plain'},xlsx:{'application/x-tika-ooxml','application/x-tika-msoffice'},xls:{'application/x-tika-ooxml','application/x-tika-msoffice'}}"
 
 egov-idgen:
   idformat-from-mdms: "true"
 
-egov-notification-sms:
-  sms-provider-url: "http://api.smscountry.com/SMSCwebservice_bulk.aspx"
+egov-notification-sms:    #Replace it for your env
+  sms-provider-url: "<SMS_GATEWAY_URL>"  #Replace it for your env, corresponding secrets put it in secrets
   sms-gateway-to-use: "SMS_COUNTRY"
   sms-sender: "SMSCOUNTRY"
   sms-sender-requesttype: "GET"
@@ -150,7 +147,7 @@ egov-user:
   egov-state-level-tenant-id: "pb"
   decryption-abac-enabled: "false"
 
-chatbot:
+chatbot:  #Replace it for your env
   kafka-topics-partition-count: 3
   kafka-topics-replication-factor: 2
   kafka-consumer-poll-ms: 10
@@ -167,20 +164,19 @@ chatbot:
   valuefirst-notification-welcome-templateid: "194791"
   valuefirst-notification-root-templateid: "194795"
   valuefirst-send-message-url: "https://api.myvaluefirst.com/psms/servlet/psms.JsonEservice"
-
   test-data-cleanup-enabled: true
 
 egov-mdms-service:
   replicas: 1
   images:
     - egovio/egov-mdms-service
-  mdms-path: "/work-dir/egov-mdms-data/data"
+  mdms-path: "/work-dir/egov-mdms-data/data"  #Replace it for your env
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/egov-mdms-data"
+      repo: "git@github.com:egovernments/egov-mdms-data"  #Replace it for your env
       branch: "QA"
-  mdms-folder: "egov-mdms-data"
-  masters-config-url: "file:///work-dir/egov-mdms-data/master-config.json"
+  mdms-folder: "egov-mdms-data"  #Replace it for your env
+  masters-config-url: "file:///work-dir/egov-mdms-data/master-config.json"  #Replace it for your env
   java-args: -Dspring.profiles.active=monitoring
 
 ws-services:
@@ -207,7 +203,7 @@ egov-indexer:
   memory_limits: "768Mi"
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
   egov-indexer-yaml-repo-path: "file:///work-dir/configs/egov-indexer/billingservices-indexer.yml,file:///work-dir/configs/egov-indexer/collection-indexer.yml,file:///work-dir/configs/egov-indexer/egov-telemetry-indexer.yml,file:///work-dir/configs/egov-indexer/egov-uploader-indexer.yml,file:///work-dir/configs/egov-indexer/error-queue.yml,file:///work-dir/configs/egov-indexer/finance-rolloutadotpion-indexer.yml,file:///work-dir/configs/egov-indexer/payment-indexer.yml,file:///work-dir/configs/egov-indexer/rainmaker-pgr-indexer.yml,file:///work-dir/configs/egov-indexer/rainmaker-pt-indexer.yml,file:///work-dir/configs/egov-indexer/rainmaker-tl-indexer.yml,file:///work-dir/configs/egov-indexer/chatbot-telemetry.yaml,file:///work-dir/configs/egov-indexer/water-service.yml,file:///work-dir/configs/egov-indexer/water-services-meter.yml,file:///work-dir/configs/egov-indexer/sewerage-service.yml,file:///work-dir/configs/egov-indexer/property-services.yml"
 
@@ -221,47 +217,40 @@ egov-persister:
   persist-yml-path: "file:///work-dir/configs/egov-persister/pt-mutation-calculator-persister.yml,file:///work-dir/configs/egov-persister/apportion-persister.yml,file:///work-dir/configs/egov-persister/billing-services-persist.yml,file:///work-dir/configs/egov-persister/egf-bill.yaml,file:///work-dir/configs/egov-persister/egov-user-event-persister.yml,file:///work-dir/configs/egov-persister/egov-workflow-v2-persister.yml,file:///work-dir/configs/egov-persister/firenoc_persiter.yaml,file:///work-dir/configs/egov-persister/hrms-employee-persister.yml,file:///work-dir/configs/egov-persister/pdf-generator.yml,file:///work-dir/configs/egov-persister/pg-service-persister.yml,file:///work-dir/configs/egov-persister/pgr.v3.yml,file:///work-dir/configs/egov-persister/property-services.yml,file:///work-dir/configs/egov-persister/pt-calculator-v2-persister.yml,file:///work-dir/configs/egov-persister/pt-drafts.yml,file:///work-dir/configs/egov-persister/pt-persist.yml,file:///work-dir/configs/egov-persister/tl-billing-slab-persister.yml,file:///work-dir/configs/egov-persister/tl-calculation-persister.yml,file:///work-dir/configs/egov-persister/uploader-persister.yml,file:///work-dir/configs/egov-persister/collection-migration-persister.yml,file:///work-dir/configs/egov-persister/property-services-registry.yml,file:///work-dir/configs/egov-persister/tradelicense.yml,file:///work-dir/configs/egov-persister/sewerage-persist.yml,file:///work-dir/configs/egov-persister/water-persist.yml,file:///work-dir/configs/egov-persister/water-meter.yml,file:///work-dir/configs/egov-persister/bpa-persister.yml,file:///work-dir/configs/egov-persister/assessment-persister.yml,file:///work-dir/configs/egov-persister/chatbot.yml"
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
 
 egov-data-uploader:
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
 
 egov-searcher:
   search-yaml-path: "file:///work-dir/configs/egov-searcher/rainmaker-pgr-v2.yml,file:///work-dir/configs/egov-searcher/weekly-impact-emailer-searcher.yml,file:///work-dir/configs/egov-searcher/PTDemandBasedSearcher.yml,file:///work-dir/configs/egov-searcher/bill-genie.yml,file:///work-dir/configs/egov-searcher/rainmaker-tl.yml,file:///work-dir/configs/egov-searcher/localitySearcher.yml,file:///work-dir/configs/egov-searcher/propertyopensearch.yml"
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
 
 egov-custom-consumer:
-  erp-host: "https://mohali-qa.egovernments.org/"
+  erp-host: "https://mohali-qa.egovernments.org/"   #Replace it for your env
 
 egov-apportion-service:
   memory_limits: 512Mi
   heap: -Xmx256m -Xms256m
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# financials >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 egf-master:
-  db-url: "jdbc:postgresql://egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com:5432/egov_qa_db"
+  db-url: "jdbc:postgresql://<DB_SERVER>:5432/egov_qa_db"  #Replace it for your env
   memory_limits: 512Mi
   heap: "-Xmx256m -Xms256m"
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# docs >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 redoc:
   replicas: 1
   images:
     - egovio/redoc:v1.0.5
   service_type: LoadBalancer
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-# gateway >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 nginx-ingress:
   images:
@@ -275,7 +264,7 @@ nginx-ingress:
   ssl-ecdh-curve: "X25519:prime256v1:secp521r1:secp384r1"
 
 cert-manager:
-  email: "nithin.dv@egovernments.org"
+  email: "nithin.dv@egovernments.org"   #Replace it for your env
   images:
     - "quay.io/jetstack/cert-manager-controller:v0.10.1"
   namespace: egov
@@ -289,7 +278,6 @@ zuul:
   egov-open-endpoints-whitelist: "/user/oauth/token,/user-otp/v1/_send,/otp/v1/_validate,/user/citizen/_create,/localization/messages,/localization/messages/v1/_search,/user/password/nologin/_update,/tenant/v1/tenant/_search,/egov-location/boundarys,/egov-location/boundarys/boundariesByBndryTypeNameAndHierarchyTypeName,/egov-location/boundarys/getLocationByLocationName,/egov-mdms-service/v1/_search,/egov-location/location/v11/geography/_search,/filestore/v1/files/url,/pt-calculator-v2/billing-slab/_search,/egov-url-shortening,/egov-searcher/property-services/propertyopensearch/_get,/egov-location/location/v11/boundarys/_search,/whatsapp-webhook/messages"
   egov-mixed-mode-endpoints-whitelist: "/filestore/v1/files/id,/filestore/v1/files,/filestore/v1/files/tag,/user/_search,/access/v1/actions/mdms/_get,/tl-services/v1/BPAREG/_create,/tl-services/v1/BPAREG/_update,/tl-calculator/v1/BPAREG/_getbill,/property-services/property/_search,/billing-service/bill/v2/_fetchbill,/billing-service/bill/v2/_search,/collection-services/payments/_search,/pg-service/transaction/v1/_update,/pg-service/transaction/v1/_create,/pdf-service/v1/_create"
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 billing-service:
   java-enable-debug: "true"
   
@@ -307,7 +295,7 @@ collection-receipt-voucher-consumer:
   kharar-erp-host: "https://kharar-qa.egovernments.org/"
   zirakpur-erp-host: "https://zirakpur-qa.egovernments.org/"
 
-finance-collections-voucher-consumer:
+finance-collections-voucher-consumer:   #Replace it for your env
   erp-env-name: "qa"
   erp-domain-name: "egovernments.org"
 
@@ -323,7 +311,7 @@ dashboard-analytics:
   config-schema-paths: "file:///work-dir/configs/egov-dss-dashboards/dashboard-analytics/*.json"
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
 
 dashboard-ingest:
@@ -331,10 +319,10 @@ dashboard-ingest:
   es-index-name: "dss-payment_v2"
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
 
-citizen:
+citizen:  #Replace it for your env, copy these .js into your S3 or other publically accessible url and replace
   custom-js-injection: |
     sub_filter.conf: "
       sub_filter  '<head>' '<head>
@@ -342,20 +330,16 @@ citizen:
       <script src=https://s3.ap-south-1.amazonaws.com/egov-dev-assets/globalConfigs.js type=text/javascript></script>
       ';"
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# reportinfra >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 report:
   tracing-enabled: "true"
   spring-datasource-tomcat-max-active: 5
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
   report-locationsfile-path: "file:///work-dir/configs/reports/reportFileLocationsv1.txt"
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# rainmaker-pgr >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 rainmaker-pgr:
   notification-sms-enabled: "false"
   notification-email-enabled: "false"
@@ -389,24 +373,21 @@ egov-workflow-v2:
 egov-hrms:
   java-args: -Dspring.profiles.active=monitoring
   heap: "-Xmx192m -Xms192m"
-  employee-applink: "https://egov-micro-qa.egovernments.org/employee/user/login"
+  employee-applink: "https://<APP-URL>/employee/user/login"      #Replace it for your env
 
 pdf-service:
   initContainers:
     gitSync:
-      repo: "git@github.com:egovernments/configs"
+      repo: "git@github.com:egovernments/configs"    #Replace it for your rainmake-customization
       branch: "master"
-
   data-config-urls: "file:///work-dir/configs/pdf-service/data-config/tradelicense-receipt.json,file:///work-dir/configs/pdf-service/data-config/property-receipt.json,file:///work-dir/configs/pdf-service/data-config/property-bill.json,file:///work-dir/configs/pdf-service/data-config/tradelicense-bill.json,file:///work-dir/configs/pdf-service/data-config/firenoc-receipt.json,file:///work-dir/configs/pdf-service/data-config/pt-receipt.json,file:///work-dir/configs/pdf-service/data-config/tl-receipt.json,file:///work-dir/configs/pdf-service/data-config/consolidatedbill.json,file:///work-dir/configs/pdf-service/data-config/consolidatedreceipt.json,file:///work-dir/configs/pdf-service/data-config/tlapplication.json,file:///work-dir/configs/pdf-service/data-config/tlcertificate.json,file:///work-dir/configs/pdf-service/data-config/ws-consolidatedacknowlegment.json,file:///work-dir/configs/pdf-service/data-config/ws-consolidatedsewerageconnection.json,file:///work-dir/configs/pdf-service/data-config/buildingpermit.json,file:///work-dir/configs/pdf-service/data-config/ptmutationcertificate.json,file:///work-dir/configs/pdf-service/data-config/tlrenewalcertificate.json,file:///work-dir/configs/pdf-service/data-config/bpa-revocation.json,file:///work-dir/configs/pdf-service/data-config/buildingpermit-low.json,file:///work-dir/configs/pdf-service/data-config/misc-receipt.json,file:///work-dir/configs/pdf-service/data-config/ws-applicationwater.json,file:///work-dir/configs/pdf-service/data-config/ws-sanctionletter.json,file:///work-dir/configs/pdf-service/data-config/ws-estimationnotice.json,file:///work-dir/configs/pdf-service/data-config/ws-applicationsewerage.json,file:///work-dir/configs/pdf-service/data-config/ws-bill.json,file:///work-dir/configs/pdf-service/data-config/ws-onetime-receipt.json,file:///work-dir/configs/pdf-service/data-config/occupancy-certificate.json"
   format-config-urls: "file:///work-dir/configs/pdf-service/format-config/tradelicense-receipt.json,file:///work-dir/configs/pdf-service/format-config/property-receipt.json,file:///work-dir/configs/pdf-service/format-config/property-bill.json,file:///work-dir/configs/pdf-service/format-config/tradelicense-bill.json,file:///work-dir/configs/pdf-service/format-config/firenoc-receipt.json,file:///work-dir/configs/pdf-service/format-config/pt-receipt.json,file:///work-dir/configs/pdf-service/format-config/tl-receipt.json,file:///work-dir/configs/pdf-service/format-config/consolidatedbill.json,file:///work-dir/configs/pdf-service/format-config/consolidatedreceipt.json,file:///work-dir/configs/pdf-service/format-config/tlapplication.json,file:///work-dir/configs/pdf-service/format-config/tlcertificate.json,file:///work-dir/configs/pdf-service/format-config/ws-consolidatedacknowlegment.json,file:///work-dir/configs/pdf-service/format-config/ws-consolidatedsewerageconnection.json,file:///work-dir/configs/pdf-service/format-config/buildingpermit.json,file:///work-dir/configs/pdf-service/format-config/ptmutationcertificate.json,file:///work-dir/configs/pdf-service/format-config/tlrenewalcertificate.json,file:///work-dir/configs/pdf-service/format-config/bpa-revocation.json,file:///work-dir/configs/pdf-service/format-config/buildingpermit-low.json,file:///work-dir/configs/pdf-service/format-config/misc-receipt.json,file:///work-dir/configs/pdf-service/format-config/ws-applicationwater.json,file:///work-dir/configs/pdf-service/format-config/ws-sanctionletter.json,file:///work-dir/configs/pdf-service/format-config/ws-estimationnotice.json,file:///work-dir/configs/pdf-service/format-config/ws-applicationsewerage.json,file:///work-dir/configs/pdf-service/format-config/ws-bill.json,file:///work-dir/configs/pdf-service/format-config/ws-onetime-receipt.json,file:///work-dir/configs/pdf-service/format-config/occupancy-certificate.json"
 
 egov-weekly-impact-notifier:
-  mail-to-address: "lata.naik@egovernments.org"
-
+  mail-to-address: "lata.naik@egovernments.org"   #Replace it for your env
   mail-interval-in-secs: "604800"
-  schedule: "30 07 * * *"
+  schedule: "30 07 * * *"  #Replace it for your env, decide your interval
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 kafka-config:
   topics: "egov.pgr.validated:1:1,egov.pgr.locationupdated:1:1,egov.pgr.workflowupdated:1:1,egov.pgr.saved:1:1,egov.pgr.indexing:1:1,egov.core.notification.email:1:1,egov.core.notification.sms:1:1,attendance-save-db:1:1,egov.employee:1:1,save-asset-db:1:1,update-asset-db:1:1,save-assetcategory-db:1:1,agreement-save-db:1:1,agreement-update-db:1:1,lams-workflow-start:1:1,lams-workflow-update:1:1,egov-common-holiday:1:1,egov.leaveopeningbalance-create:1:1,egov.leaveopeningbalance-update:1:1,egov-hr-leavetype:1:1,egov.leaveallotment-create:1:1,egov.leaveallotment-update:1:1,egov.designation-create:1:1,egov.designation-update:1:1,egov.position-create:1:1,egov.position-update:1:1,egov.egf.masters.validated.topic:1:1,egov.egf.masters.completed:1:1,egov.wcms.category-create:1:1,property-create-validated:1:1,property-create-tax-calculated:1:1,property-create-user-validated:1:1,property-create-workflow-started:1:1,property-create-workflow-updated:1:1,save-bill-db:1:1,update-bill-db:1:1,save-bill:1:1,update-bill:1:1,save-demand:1:1,update-demand:1:1,egov.collection.receipt-create:1:1,save-taxHeadMaster-db:1:1,update-taxHeadMaster:1:1,save-glCodeMaster-db:1:1,save-glCodeMaster:1:1,update-glCodeMaster-db:1:1,update-glCodeMaster:1:1,save-taxperiod-db:1:1,save-taxperiod:1:1,update-taxperiod-db:1:1,update-taxperiod:1:1,save-businessservicedetail-db:1:1,save-businessservicedetail:1:1,update-businessservicedetail-db:1:1,update-businessservicedetail:1:1,property-update-workflow-approved:1:1,property-update-user-validated:1:1,property-update-workflow-started:1:1,property-titletransfer-create-user-validated:1:1,property-titletransfer-update-user-validated:1:1,property-titletransfer-create-workflow-started:1:1,property-titletransfer-approved:1:1,property-titletransfer-workflow-updated:1:1,property-update-tax-calculated:1:1,property-update-validated:1:1,property-titletransfer-cretae-validated:1:1,property-titletransfer-update-validated:1:1,property-create-tax-generated:1:1,create-legacy-tradelicense-validated:1:1,egov.pgr.servicedefinition-create:1:1,demand-bill-update:1:1,egov.pgr.servicedefinition-update:1:1,egov-common-department-create:1:1,egov-common-department-update:1:1,egov.services.tl-services.create.legacy.tradelicense.validated:1:1,save-service-db:1:1,update-service-db:1:1,update-legacy-tradelicense-validated:1:1,tradelicense-validated:1:1,tradelicense-persisted:1:1,tradelicense-workflow-populated:1:1,demand-bill-update:1:1,egov.wcms.newconnection-create:1:1,egov.wcms.newconnection-update:1:1,update-newconn-workflow:1:1,initiated-newconn-workflow:1:1,works-offlinestatus-create-validated:1:1,works-offlinestatus-update-validated:1:1,works-contractor-create-validated:1:1,works-contractor-update-validated:1:1,works-letterofacceptance-create-validated:1:1,works-letterofacceptance-update-validated:1:1,works-measurementbook-create-update:1:1,works-revision-detailed-estimate-create-update:1:1,works-workorder-createupdate-validated:1:1,lcms-create-summon-validated:1:1,lcms-create-case:1:1,lcms-create-vakalatnama:1:1,lcms-parawisecomment-create:1:1,lcms-parawisecomment-update:1:1,lcms-assign-advocate:1:1,lcms-update-assign-advocate:1:1,lcms-advocate-create:1:1,lcms-advocate-update:1:1,advocate-payment-create:1:1,advocate-payment-update:1:1,lcms-opinion-create:1:1,lcms-opinion-update:1:1,legacy-case-create:1:1,legacy-hearing-create:1:1,legacy-case-voucher-create:1:1,legacy-case-advocate-create:1:1,lcms-hearingdetails-create:1:1,lcms-hearingdetails-update:1:1,lcms-notice-create:1:1,lcms-notice-update:1:1,lcms-register-create:1:1,lcms-register-update:1:1,lcms-evidence-create:1:1,lcms-evidence-update:1:1,lcms-agency-create:1:1,lcms-agency-update:1:1,lcms-personal-details-create:1:1,Lcms-event-create:1:1,lcms-create-summon-indexer:1:1,lcms-legacy-casecreate-indexer:1:1,works-abstract-estimate-createandupdate:1:1,works-detailed-estimate-createandupdate:1:1,works-revision-loa-create-update:1:1,works-sorrate-saveorupdate-validated:1:1,works-estimatetemplate-saveorupdate-validated:1:1,lcms-update-summon-validated:1:1,mdms.create.gitpushprocess:1:1,works-contractoradvance-saveorupdate-validated:1:1,works-qualitytesting-createandupdate:1:1,works-abstract-estimate-backupdate:1:1,works-detailedestimate-backupdate:1:1,works-abstract-estimate-backupdate-oncreate-detailedestimate:1:1,works-abstract-estimate-backupdate-oncancel-detailedestimate:1:1,works-detailedestimate-backupdate-oncreate-loa:1:1,works-detailedestimate-backupdate-oncancel-loa:1:1,swm-vehicleschedule-save-topic:1:1,works-projectcode-create:1:1,works-projectcode-update:1:1,works-masters-remarks-createandupdate:1:1,works-milestonetemplate-saveorupdate-validated:1:1,works-contractorbill-create-update:1:1,works-measurementbook-backupdate-for-billstatus:1:1,works-notice-createupdate-validated:1:1,works-milestone-saveorupdate-validated:1:1,works-trackmilestone-saveorupdate-validated:1:1,swm-shift-save-topic:1:1,swm-shift-update-topic:1:1,swm-shift-indexer-topic:1:1,works-letterofacceptance-backupdate-oncreate-workorder:1:1,works-letterofacceptance-backupdate-oncancel-workorder:1:1,works-loa-backupdate-oncreate-milestone:1:1,works-loa-backupdate-oncancel-milestone:1:1,works-loa-backupdate-oncreate-contractoradvance:1:1,works-loa-backupdate-oncancel-contractoradvance:1:1,works-loa-backupdate-onupdate-withallofflinestatusandworkorder:1:1,works-workorder-backupdate-oncreate-milestone:1:1,works-workorder-backupdate-oncancel-contractoradvance:1:1,works-loa-backupdate-onupdate-offlinestatus:1:1,works-workorder-backupdate-onupdate-offlinestatus:1:1,works-loa-backupdate-onupdate-withallofflinestatus:1:1,works-workorder-backupdate-onupdate-withallofflinestatus:1:1,works-loa-backupdate-oncreate-bill:1:1,works-loa-backupdate-oncancel-bill:1:1,works-loa-backupdate-oncreatemb:1:1,works-loa-backupdate-oncancelmb:1:1,works-loa-backupdate-oncreatembandnobill:1:1,works-loa-backupdate-oncreatembandbill:1:1,works-workorder-backupdate-oncreate-bill:1:1,works-workorder-backupdate-oncancel-bill:1:1,works-workorder-backupdate-oncreatembandnobill:1:1,works-workorder-backupdate-oncreatembandbill:1:1,egov.error:1:1,save-pt-property:1:1,update-pt-property:1:1,save-pt-billingslab:1:1,update-pt-billingslab:1:1,save-pg-txns:1:1,update-pg-txns:1:1,save-pg-txns-dump:1:1,update-pg-txns-dump:1:1,save-pt-drafts:1:1,update-pt-drafts:1:1,egov.collectionmasters.bankaccountservicemapping-create:1:1,bankaccountservicemapping-create:1:1,update-pt-property-index:1:1"
@@ -482,14 +463,11 @@ jaeger-config:
         }
       }
 
-# redis >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 redis:
   replicas: 1
   images:
     - egovio/redis:3.2
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 playground:
   replicas: 1
@@ -501,42 +479,33 @@ pgadmin:
     - egovio/pgadmin:v0.1
 
 pgadmin-config:
-  host: "egov-dev-db.ctm6jbmr5mnj.ap-south-1.rds.amazonaws.com"
+  host: "<DB_SERVER>"  #Replace it for your env
   db-admin-username: "egov_qa"
   db-read-username: "egovqa_readonly"
   port: "5432"
   env: "QA"
   maintenance-db-name: "egov_qa_db"
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# egov-wordpress-portal >>>>>>>>>>>>>>>>>
-
-egov-wordpress-portal:
+egov-wordpress-portal:   #Replace it for your env
   replicas: 1
   images:
     - egovio/wordpress
-  db-host: prod-egov.mysql.database.azure.com
+  db-host: <WORDPRESS_DB_URL>
   db-username: SUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D51JRc/Gepwka4zii7e7dw+dSUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D51JRc/Gepwka4zii7e7dw+dSUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D50kojRv5BatVU6B2oxjr2IlhnQR4foH7GxtU1trgfom5A==
   db-password: SUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D51JRc/Gepwka4zii7e7dw+dSUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D51JRc/Gepwka4zii7e7dw+dSUXPxnqcJGuM4ou3u3cPnUlFz8Z6nCRrjOKLt7t3D50GzpQL2kP76wJL2mW+XFJrKn7KGgDz7lV6FZN/e8IPEg==
   db-name: egov_wp_portal_db
   wordpress_siteurl: http://qa.egovernments.org
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 egov-enc-service:
-  state-level-tenant-id: "pb"
-  # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  state-level-tenant-id: "pb"     #Replace it for your env
 
-# kafka-v2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 kafka-v2:
   persistence:
     enabled: true
-    aws:
-      - volumeId: "vol-09196e64f477c8e68"
-        zone: ap-south-1a
-      - volumeId: "vol-0526eacc5baf6c00f"
-        zone: ap-south-1a
-      - volumeId: "vol-08afb07ac5da1f684"
-        zone: ap-south-1a
+    aws:   #Replace it for your env
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
   zookeeperHosts: "zookeeper-v2.zookeeper-cluster:2181/kafka-v2"
 
   heapOptions: "-Xms704M -Xmx704M"
@@ -547,19 +516,14 @@ kafka-v2:
   minInsyncReplicas: "1"
   offsetsReplicationFactor: "3"
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# zookeeper-v2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 zookeeper-v2:
   persistence:
     enabled: true
-    aws:
-      - volumeId: "vol-030eab025d46e944d"
-        zone: ap-south-1a
-      - volumeId: "vol-0c28788cc50d62d88"
-        zone: ap-south-1a
-      - volumeId: "vol-06be40e9e019ae2d7"
-        zone: ap-south-1a
+    aws:   #Replace it for your env
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
 
   ## Zookeeper JVM Heap Option
   heapOptions: "-Xms256M -Xmx256M"
@@ -575,21 +539,15 @@ zookeeper-v2:
       cpu: 300m
       memory: 384Mi
 
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-# es-v1-cluster >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 elasticsearch-data-v1:
   image:
     tag: 6.6.2
   persistence:
     enabled: true
-    aws:
-      - volumeId: "vol-0c2068c7a5f367f3a"
-        zone: ap-south-1a
-      - volumeId: "vol-086297c15fffa933f"
-        zone: ap-south-1a
-      - volumeId: "vol-0a180d285acc99ce8"
-        zone: ap-south-1a
+    aws:   #Replace it for your env
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
 
   esJavaOpts: "-Xmx1g -Xms1g"
   resources:
@@ -606,13 +564,10 @@ elasticsearch-master-v1:
     tag: 6.6.2
   persistence:
     enabled: true
-    aws:
-      - volumeId: "vol-0bc39b97c9fa88d08"
-        zone: ap-south-1a
-      - volumeId: "vol-00d4353308905e915"
-        zone: ap-south-1a
-      - volumeId: "vol-04e5fec21f884bbf2"
-        zone: ap-south-1a
+    aws:   #Replace it for your env
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
+      - volumeId: "<NFS or iSCSI or Volume ID>"   #Replace it for your env, persistant volumes IDs
 
   esJavaOpts: "-Xmx448m -Xms448m"
   resources:
@@ -633,7 +588,6 @@ es-curator:
 kuberhealthy:
   deployment:
     replicas: 1
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 oauth2-proxy: 
   config:
     configFile: |-
@@ -641,18 +595,17 @@ oauth2-proxy:
       github_org = "egovernments" 
       github_team = "micro-service-qa,devops"
       upstreams = [ "file:///dev/null" ]
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 egov-finance:
   replicas: 1
 
 # eGov-eDCR Tenants
 edcrTenants: |
-  common.domain.name=egov-micro-qa.egovernments.org
-  tenant.egov-micro-qa.egovernments.org=state
+  common.domain.name=<APP-URL>      #Replace it for your env
+  tenant.<APP-URL>=state      #Replace it for your env
   client.id=punjab
-  tenant.amritsar-egov-micro-qa.egovernments.org=amritsar
-  tenant.jalandhar-egov-micro-qa.egovernments.org=jalandhar
+  tenant.amritsar-<APP-URL>=amritsar      #Replace it for your env
+  tenant.jalandhar-<APP-URL>=jalandhar      #Replace it for your env
   collection.debitaccounthead.client.impl.class=org.egov.collection.integration.services.DebitAccountHeadDetailsServiceImpl
   ms.url=http://egov-filestore.egov:8080/
   filestoreservice.beanname=egovMicroServiceStore
