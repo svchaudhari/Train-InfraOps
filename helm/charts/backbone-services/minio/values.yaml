@@ -324,12 +324,14 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
-  enabled: false
+  enabled: true
   context: "minio"
   servicePort: 9000
   zuul: false
   waf: 
     enabled: false
+  additionalAnnotations: |
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m  
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
