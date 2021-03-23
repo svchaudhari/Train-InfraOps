@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: SupportAdmin
+  namespace: mynamespace
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: SupportAdmin-full-access
+  namespace: mynamespace
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  - cronjobs
+  verbs: ["*"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: SupportAdmin-view
+  namespace: mynamespace
+subjects:
+- kind: ServiceAccount
+  name: SupportAdmin
+  namespace: mynamespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: SupportAdmin-full-access
