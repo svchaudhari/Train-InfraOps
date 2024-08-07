@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#!/bin/sh
+
 if [ -z "$1" ]; then
     FOLDER=
 else
